@@ -2,13 +2,19 @@ package magiclibrary.block.entity;
 
 import magiclibrary.MagicLibrary;
 import magiclibrary.common.EnchantmentsContainer;
+import magiclibrary.screenhandler.MagicLibraryScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class MagicLibraryBlockEntity extends BlockEntity {
+public class MagicLibraryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
 
@@ -68,5 +74,15 @@ public class MagicLibraryBlockEntity extends BlockEntity {
         super.readNbt(nbt, registries);
         enchantments.fromString(nbt.getString("enchantments"));
         points = nbt.getInt("points");
+    }
+
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+        return new MagicLibraryScreenHandler(syncId, playerInventory, enchantments, points);
+    }
+
+    @Override
+    public Text getDisplayName() {
+        return Text.translatable("screen.magic_library.title");
     }
 }

@@ -3,6 +3,8 @@ package magiclibrary.block;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
+
 import com.mojang.serialization.MapCodec;
 
 import magiclibrary.MagicLibrary;
@@ -21,8 +23,8 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
@@ -103,8 +105,16 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
             return ActionResult.SUCCESS;
         }
 
-        var itemId = Registries.ITEM.getEntry(stack.getItem()).getIdAsString();
-        if (!itemId.equals("minecraft:enchanted_book")) {
+        if (stack.getItem() != Items.ENCHANTED_BOOK) {
+            var factory = state.createScreenHandlerFactory(world, pos);
+            if (factory != null) {
+                player.openHandledScreen(factory);
+                return ActionResult.SUCCESS;
+            }
+            else {
+                return ActionResult.FAIL;
+            }
+            /* 
             // temporary
             if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
                 player.sendMessage(Text.literal(libraryBlockEntity.getEnchantmentsString()), false);
@@ -119,7 +129,7 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
                     player.giveItemStack(newStack);
                 }
             }
-            return ActionResult.SUCCESS;
+            */
         }
 
         if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity && EnchantmentHelper.hasEnchantments(stack)) {
@@ -143,6 +153,11 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
         }
 
         return ActionResult.FAIL;
+    }
+
+    @Nullable
+    protected NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
+        return (MagicLibraryBlockEntity)world.getBlockEntity(pos);
     }
 
     private void updateFilled(World world, BlockPos pos, BlockState state) {

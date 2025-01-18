@@ -10,6 +10,7 @@ import magiclibrary.block.MagicLibraryBlocks;
 import magiclibrary.block.entity.MagicLibraryBlockEntities;
 import magiclibrary.item.MagicLibraryItems;
 import magiclibrary.item.components.MagicLibraryComponents;
+import magiclibrary.screenhandler.MagicLibraryScreenHandlers;
 
 public class MagicLibrary implements ModInitializer {
 	public static final String MODID = "magiclibrary";
@@ -26,5 +27,6 @@ public class MagicLibrary implements ModInitializer {
 		MagicLibraryItems.registerItems();
 		MagicLibraryItems.registerItemGroups();
 		MagicLibraryComponents.registerComponents();
+		MagicLibraryScreenHandlers.registerScreenHandlers();
 	}
 }

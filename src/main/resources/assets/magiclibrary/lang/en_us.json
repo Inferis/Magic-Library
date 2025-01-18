@@ -3,5 +3,9 @@
 
     "item.magiclibrary.magic_library": "Magic Library",
 
-    "text.magiclibrary.book_registered": "Book was registered in library"
+    "text.magiclibrary.book_registered": "Book was registered in library",
+
+    "screen.magic_library.title": "Magic Library",
+    "screen.magic_library.text.points": " available points"
+
 }
