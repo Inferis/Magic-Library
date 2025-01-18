@@ -11,15 +11,18 @@ import magiclibrary.item.components.MagicLibraryComponents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.IntProperty;
@@ -107,8 +110,19 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
 
         var itemId = Registries.ITEM.getEntry(stack.getItem()).getIdAsString();
         if (!itemId.equals("minecraft:enchanted_book")) {
+            // temporary
             if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
                 player.sendMessage(Text.literal(libraryBlockEntity.getEnchantmentsString()), false);
+            }
+            // temporary
+            var enchantmentRegistry = world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
+            if (enchantmentRegistry.isPresent()) {
+                var e = enchantmentRegistry.get().getEntry(Enchantments.BLAST_PROTECTION.getValue());
+                if (e.isPresent()) {
+                    var newStack = new ItemStack(Items.ENCHANTED_BOOK);
+                    newStack.addEnchantment(e.get(), 4);
+                    player.giveItemStack(newStack);
+                }
             }
             return ActionResult.SUCCESS;
         }
@@ -116,10 +130,11 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
         if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity && EnchantmentHelper.hasEnchantments(stack)) {
             // register enchantments
             var enchantments = EnchantmentHelper.getEnchantments(stack);
-            MagicLibrary.LOGGER.info("enchantments: " + enchantments);
             for (var enchantment: enchantments.getEnchantments()) {
-                MagicLibrary.LOGGER.info("registering enchantment " + enchantment.getIdAsString());
-                libraryBlockEntity.registerEnchantment(enchantment.getIdAsString(), enchantments.getLevel(enchantment));
+                var level = enchantments.getLevel(enchantment);
+                libraryBlockEntity.registerEnchantment(enchantment.getIdAsString(), level);
+                var points = (int)Math.pow(2, level-1) * enchantment.value().getAnvilCost();
+                libraryBlockEntity.addPoints(points);
             }
 
             // consume book
