@@ -1,0 +1,6 @@
+{
+    "parent": "magiclibrary:block/magic_library_0",
+    "textures": {
+        "front": "magiclibrary:block/magic_library_front_6"
+    }
+}

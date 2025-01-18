@@ -1,0 +1,145 @@
+package magiclibrary.block;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mojang.serialization.MapCodec;
+
+import magiclibrary.MagicLibrary;
+import magiclibrary.block.entity.MagicLibraryBlockEntity;
+import magiclibrary.item.components.MagicLibraryComponents;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.state.StateManager.Builder;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+
+public class MagicLibraryBlock extends Block implements BlockEntityProvider {
+    public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
+    public static final IntProperty FILLED = IntProperty.of("filled", 0, 18);
+    public static final MapCodec<MagicLibraryBlock> CODEC = createCodec(MagicLibraryBlock::new);
+    
+    private MagicLibraryBlockEntity breakingBlockEntity = null;
+    
+    public MagicLibraryBlock(Settings settings) {
+        super(settings);
+        this.setDefaultState(stateManager.getDefaultState().with(FACING, Direction.NORTH).with(FILLED, 0));
+    }    
+
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new MagicLibraryBlockEntity(pos, state);
+    }
+
+
+    @Override
+    protected MapCodec<MagicLibraryBlock> getCodec() {
+        return CODEC;
+    }
+
+    @Override
+    protected void appendProperties(Builder<Block, BlockState> builder) {
+        super.appendProperties(builder);
+        builder.add(FACING, FILLED);
+    }
+
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+
+        var enchantmentsString = itemStack.get(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE);
+        MagicLibrary.LOGGER.info("onPlaced str=" + enchantmentsString);
+
+        if (enchantmentsString != null && world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity breakingBlockEntity) {
+            breakingBlockEntity.setEnchantmentsString(enchantmentsString);
+            updateFilled(world, pos, state);
+        }
+    }
+
+    @Override
+    protected void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+        breakingBlockEntity = (MagicLibraryBlockEntity)world.getBlockEntity(pos);
+        MagicLibrary.LOGGER.info("onBlockBreakStart" + breakingBlockEntity);
+
+        super.onBlockBreakStart(state, world, pos, player);
+    }
+
+    @Override
+    protected List<ItemStack> getDroppedStacks(BlockState state, net.minecraft.loot.context.LootWorldContext.Builder builder) {
+        var result = new ArrayList<ItemStack>();
+        var entry = Registries.ITEM.getEntry(MagicLibrary.id("magic_library"));
+        MagicLibrary.LOGGER.info("getDroppedStacks" + breakingBlockEntity);
+        if (entry.isPresent() && breakingBlockEntity != null) {
+            var stack = new ItemStack(entry.get());
+            stack.set(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE, breakingBlockEntity.getEnchantmentsString());
+            result.add(stack);
+        }
+        return result;
+    }
+
+    @Override
+    protected ActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (world.isClient) { 
+            return ActionResult.SUCCESS;
+        }
+
+        var itemId = Registries.ITEM.getEntry(stack.getItem()).getIdAsString();
+        if (!itemId.equals("minecraft:enchanted_book")) {
+            if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
+                player.sendMessage(Text.literal(libraryBlockEntity.getEnchantmentsString()), false);
+            }
+            return ActionResult.SUCCESS;
+        }
+
+        if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity && EnchantmentHelper.hasEnchantments(stack)) {
+            // register enchantments
+            var enchantments = EnchantmentHelper.getEnchantments(stack);
+            MagicLibrary.LOGGER.info("enchantments: " + enchantments);
+            for (var enchantment: enchantments.getEnchantments()) {
+                MagicLibrary.LOGGER.info("registering enchantment " + enchantment.getIdAsString());
+                libraryBlockEntity.registerEnchantment(enchantment.getIdAsString(), enchantments.getLevel(enchantment));
+            }
+
+            // consume book
+            stack.decrement(1);
+
+            // update state to indicate fullness, but only if a enchantment was registered
+            updateFilled(world, pos, state);
+
+            player.sendMessage(Text.translatable("text.magiclibrary.book_registered"), true);
+            return ActionResult.SUCCESS;
+        }
+
+        return ActionResult.FAIL;
+    }
+
+    private void updateFilled(World world, BlockPos pos, BlockState state) {
+        if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
+            var size = libraryBlockEntity.getEnchantmentsSize();
+            if (size > 18) { size = 18; }
+            world.setBlockState(pos, state.with(FILLED, size));
+        }
+    }
+}

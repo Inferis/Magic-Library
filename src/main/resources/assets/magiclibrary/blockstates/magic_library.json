@@ -1,0 +1,61 @@
+{
+    "variants": {
+        "filled=0": {
+            "model": "magiclibrary:block/magic_library_0"
+        },
+        "filled=1": {
+            "model": "magiclibrary:block/magic_library_1"
+        },
+        "filled=2": {
+            "model": "magiclibrary:block/magic_library_2"
+        },
+        "filled=3": {
+            "model": "magiclibrary:block/magic_library_3"
+        },
+        "filled=4": {
+            "model": "magiclibrary:block/magic_library_4"
+        },
+        "filled=5": {
+            "model": "magiclibrary:block/magic_library_5"
+        },
+        "filled=6": {
+            "model": "magiclibrary:block/magic_library_6"
+        },
+        "filled=7": {
+            "model": "magiclibrary:block/magic_library_7"
+        },
+        "filled=8": {
+            "model": "magiclibrary:block/magic_library_8"
+        },
+        "filled=9": {
+            "model": "magiclibrary:block/magic_library_9"
+        },
+        "filled=10": {
+            "model": "magiclibrary:block/magic_library_10"
+        },
+        "filled=11": {
+            "model": "magiclibrary:block/magic_library_11"
+        },
+        "filled=12": {
+            "model": "magiclibrary:block/magic_library_12"
+        },
+        "filled=13": {
+            "model": "magiclibrary:block/magic_library_13"
+        },
+        "filled=14": {
+            "model": "magiclibrary:block/magic_library_14"
+        },
+        "filled=15": {
+            "model": "magiclibrary:block/magic_library_15"
+        },
+        "filled=16": {
+            "model": "magiclibrary:block/magic_library_16"
+        },
+        "filled=17": {
+            "model": "magiclibrary:block/magic_library_17"
+        },
+        "filled=18": {
+            "model": "magiclibrary:block/magic_library_18"
+        }
+    }
+}

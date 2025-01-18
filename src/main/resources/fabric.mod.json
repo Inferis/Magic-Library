@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "magiclibrary",
+	"version": "${version}",
+	"name": "Magic Library",
+	"description": "This is a a mod that offers a 'magic library': a storage for your enchantment books.",
+	"authors": [
+		"Inferis"
+	],
+	"contact": {
+		"homepage": "https://inferis.org/",
+		"sources": "https://github.com/Inferis/Magic-Library"
+	},
+	"license": "MIT",
+	"icon": "assets/magiclibrary/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"magiclibrary.MagicLibrary"
+		],
+		"client": [
+			"magiclibrary.MagicLibraryClient"
+		]
+	},
+	"mixins": [
+		"magiclibrary.mixins.json",
+		{
+			"config": "magiclibrary.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.10",
+		"minecraft": "~1.21.4",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}

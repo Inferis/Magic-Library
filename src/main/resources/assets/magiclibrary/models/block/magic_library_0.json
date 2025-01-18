@@ -1,0 +1,9 @@
+{
+    "parent": "minecraft:block/orientable",
+    "textures": {
+        "front": "magiclibrary:block/magic_library_front_0",
+        "side": "magiclibrary:block/magic_library_side",
+        "top": "magiclibrary:block/magic_library_top",
+        "bottom": "magiclibrary:block/magic_library_top"        
+    }
+}
