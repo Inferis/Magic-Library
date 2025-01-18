@@ -10,9 +10,19 @@ import net.minecraft.util.math.BlockPos;
 
 public class MagicLibraryBlockEntity extends BlockEntity {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
+    private int points = 0;
 
     public MagicLibraryBlockEntity(BlockPos pos, BlockState state) {
         super(MagicLibraryBlockEntities.MAGIC_LIBRARY, pos, state);
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
+        markDirty();
+    }
+
+    public int getPoints() { 
+        return points;
     }
 
     public boolean registerEnchantment(String identifier, int level) {
@@ -50,13 +60,13 @@ public class MagicLibraryBlockEntity extends BlockEntity {
     protected void writeNbt(NbtCompound nbt, WrapperLookup registries) {
         super.writeNbt(nbt, registries);
         nbt.putString("enchantments", enchantments.toString());
+        nbt.putInt("points", points);
     }
 
     @Override
     protected void readNbt(NbtCompound nbt, WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        if (nbt.contains("enchantments")) {
-            enchantments.fromString(nbt.getString("enchantments"));
-        }
+        enchantments.fromString(nbt.getString("enchantments"));
+        points = nbt.getInt("points");
     }
 }
