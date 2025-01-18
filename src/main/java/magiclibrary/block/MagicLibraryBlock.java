@@ -73,8 +73,6 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
         super.onPlaced(world, pos, state, placer, itemStack);
 
         var enchantmentsString = itemStack.get(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE);
-        MagicLibrary.LOGGER.info("onPlaced str=" + enchantmentsString);
-
         if (enchantmentsString != null && world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity breakingBlockEntity) {
             breakingBlockEntity.setEnchantmentsString(enchantmentsString);
             updateFilled(world, pos, state);
@@ -84,8 +82,6 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
     @Override
     protected void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
         breakingBlockEntity = (MagicLibraryBlockEntity)world.getBlockEntity(pos);
-        MagicLibrary.LOGGER.info("onBlockBreakStart" + breakingBlockEntity);
-
         super.onBlockBreakStart(state, world, pos, player);
     }
 
@@ -93,7 +89,6 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
     protected List<ItemStack> getDroppedStacks(BlockState state, net.minecraft.loot.context.LootWorldContext.Builder builder) {
         var result = new ArrayList<ItemStack>();
         var entry = Registries.ITEM.getEntry(MagicLibrary.id("magic_library"));
-        MagicLibrary.LOGGER.info("getDroppedStacks" + breakingBlockEntity);
         if (entry.isPresent() && breakingBlockEntity != null) {
             var stack = new ItemStack(entry.get());
             stack.set(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE, breakingBlockEntity.getEnchantmentsString());
