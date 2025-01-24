@@ -8,13 +8,15 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.util.math.BlockPos;
 
 public class MagicLibraryScreenHandler extends ScreenHandler {
     private EnchantmentsContainer enchantmentsContainer;
     private int points;
+    private BlockPos entityPos;
 
     public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory, MagicLibraryScreenData data) {
-        this(syncId, playerInventory, EnchantmentsContainer.fromString(data.enchantments()), data.points());
+        this(syncId, playerInventory, EnchantmentsContainer.fromString(data.enchantments()), data.points(), data.entityPos());
     }
 
     @Override
@@ -23,10 +25,11 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
         super.syncState();
     }
 
-    public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory, EnchantmentsContainer enchantmentsContainer, int points) {
+    public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory, EnchantmentsContainer enchantmentsContainer, int points, BlockPos entityPos) {
         super(MagicLibraryScreenHandlers.MAGIC_LIBRARY, syncId);
         this.enchantmentsContainer = enchantmentsContainer;
         this.points = points;
+        this.entityPos = entityPos;
         addPlayerSlots(playerInventory, 48, 149);
     }
     
@@ -36,6 +39,10 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
 
     public EnchantmentsContainer getEnchantments() {
         return enchantmentsContainer;
+    }
+
+    public BlockPos getEntityPos() {
+        return entityPos;
     }
 
     @Override

@@ -49,6 +49,7 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
         }
     
         private EnchantmentEntry(Enchantment enchantment, int level, int points, int maxPoints, TextRenderer textRenderer, Consumer<EnchantmentEntry> onPressed) {
+            points *= enchantment.getAnvilCost();
             this.points = points;
             this.enchantment = enchantment;
             this.level = level;

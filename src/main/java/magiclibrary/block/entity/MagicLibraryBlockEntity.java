@@ -6,6 +6,7 @@ import magiclibrary.screenhandler.MagicLibraryScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
@@ -24,12 +25,20 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
         super(MagicLibraryBlockEntities.MAGIC_LIBRARY, pos, state);
     }
 
-    public void addPoints(int points) {
-        this.points += points;
+    public void addPointsForLevel(int level, Enchantment enchantment) {
+        points += (int)Math.pow(2, level-1) * enchantment.getAnvilCost();
         markDirty();
     }
 
-    public int getPoints() { 
+    public void deductPointsForLevel(int level, Enchantment enchantment) {
+        points -= (int)Math.pow(2, level-1) * enchantment.getAnvilCost();
+        if (points < 0) {
+            points = 0;
+        }
+        markDirty();
+    }
+
+    public int getPoints() {
         return points;
     }
 
@@ -80,7 +89,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new MagicLibraryScreenHandler(syncId, playerInventory, enchantments, points);
+        return new MagicLibraryScreenHandler(syncId, playerInventory, enchantments, points, getPos());
     }
 
     @Override
@@ -90,6 +99,6 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-        return new MagicLibraryScreenData(20, getEnchantmentsString());
+        return new MagicLibraryScreenData(points, getEnchantmentsString(), getPos());
     }
 }

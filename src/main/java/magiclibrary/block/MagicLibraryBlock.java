@@ -138,8 +138,7 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
             for (var enchantment: enchantments.getEnchantments()) {
                 var level = enchantments.getLevel(enchantment);
                 libraryBlockEntity.registerEnchantment(enchantment.getIdAsString(), level);
-                var points = (int)Math.pow(2, level-1) * enchantment.value().getAnvilCost();
-                libraryBlockEntity.addPoints(points);
+                libraryBlockEntity.addPointsForLevel(level, enchantment.value());
             }
 
             // consume book

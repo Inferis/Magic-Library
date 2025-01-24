@@ -71,7 +71,7 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
                         int level2 = level;
                         var entry = EnchantmentEntry.of(enchantment.get().value(), level, handler.getPoints(), getTextRenderer(), pressedEntry -> {
                             handler.deductPoints(pressedEntry.points);
-                            ClientPlayNetworking.send(new ExtractEnchantmentC2SPayload(identifier, level2));
+                            ClientPlayNetworking.send(new ExtractEnchantmentC2SPayload(identifier, level2, handler.getEntityPos()));
                             var y = listWidget.getScrollY();
                             clearAndInit();
                             listWidget.setScrollY(y);

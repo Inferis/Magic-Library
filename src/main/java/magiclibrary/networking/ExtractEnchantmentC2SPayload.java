@@ -1,6 +1,7 @@
 package magiclibrary.networking;
 
 import magiclibrary.MagicLibrary;
+import magiclibrary.block.entity.MagicLibraryBlockEntity;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
@@ -11,12 +12,14 @@ import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 
-public record ExtractEnchantmentC2SPayload(String identifier, int level) implements CustomPayload {
+public record ExtractEnchantmentC2SPayload(String identifier, int level, BlockPos entityPos) implements CustomPayload {
     public static Id<ExtractEnchantmentC2SPayload> ID = new CustomPayload.Id<>(MagicLibrary.id("extract_enchantment_c2s_payload"));
     public static PacketCodec<RegistryByteBuf, ExtractEnchantmentC2SPayload> CODEC = PacketCodec.tuple(
             PacketCodecs.STRING, ExtractEnchantmentC2SPayload::identifier,
             PacketCodecs.INTEGER, ExtractEnchantmentC2SPayload::level,
+            BlockPos.PACKET_CODEC, ExtractEnchantmentC2SPayload::entityPos,
             ExtractEnchantmentC2SPayload::new);
 
     @Override
@@ -30,12 +33,16 @@ public record ExtractEnchantmentC2SPayload(String identifier, int level) impleme
             var enchantmentRegistry = context.player().getWorld().getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
             EnchantmentHelper.apply(stack, builder -> {
                 var enchantmentEntry = enchantmentRegistry.flatMap(registry -> registry.getEntry(Identifier.of(identifier)));
-                enchantmentEntry.ifPresent(enchantment -> builder.add(enchantment, level()));
+                enchantmentEntry.ifPresent(enchantment -> {
+                    builder.add(enchantment, level());
+                    if (context.player().getWorld().getBlockEntity(entityPos()) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
+                        libraryBlockEntity.deductPointsForLevel(level, enchantment.value());
+                    }
+                });
             });
             if (!context.player().giveItemStack(stack)) {
                 context.player().dropItem(stack, false, false);
             }
-
         });
     }
 }
