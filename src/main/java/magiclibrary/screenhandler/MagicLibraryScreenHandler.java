@@ -27,7 +27,7 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
         super(MagicLibraryScreenHandlers.MAGIC_LIBRARY, syncId);
         this.enchantmentsContainer = enchantmentsContainer;
         this.points = points;
-        addPlayerSlots(playerInventory, 8, 130);
+        addPlayerSlots(playerInventory, 48, 149);
     }
     
     public int getPoints() {

@@ -16,6 +16,7 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ElementListWidget;
 import net.minecraft.client.gui.widget.ElementListWidget.Entry;
 import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,13 +32,15 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     private int originY;
     private int pointsY;
     private EnchantmentListWidget listWidget;
+    private TextWidget pointsWidget;
 
     public MagicLibraryScreen(MagicLibraryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
-        backgroundWidth = 176;
-        backgroundHeight = 212;
+        backgroundWidth = 256;
+        backgroundHeight = 231;
         playerInventoryTitleY = backgroundHeight - 94;
-        pointsY = 99;
+        playerInventoryTitleX += 40;
+        pointsY = titleY;
     }
 
     @Override
@@ -47,8 +50,8 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
         originX = (width - backgroundWidth) / 2;
         originY = (height - backgroundHeight) / 2;
 
-        listWidget = addDrawableChild(new EnchantmentListWidget(client, 160, 74, originX + 8, originY + 21, 20));
-        listWidget.setPosition(originX + 8, originY + 21);
+        listWidget = addDrawableChild(new EnchantmentListWidget(client, 240, 106, originX + 8, originY + 19, 20));
+        listWidget.setPosition(originX + 8, originY + 19);
 
         var enchantmentRegistry = client.world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
         if (enchantmentRegistry.isPresent()) {
@@ -67,11 +70,11 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
             }
         }
 
-    }
+   }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (mouseX >= originX + 8 && mouseX < originX + 168 && mouseY >= originY + 21 && mouseY < 95) {
+        if (mouseX >= originX + 8 && mouseX < originX + 248 && mouseY >= originY + 19 && mouseY < 113) {
             listWidget.setScrollY(listWidget.getScrollY() + verticalAmount);
         }
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
@@ -86,11 +89,13 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
 
+        var pointsText = Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magic_library.text.points"));
+        int width = (int)(textRenderer.getTextHandler().getWidth(pointsText.toString()) / 4.0);
         context.drawText(
-            textRenderer, 
-            Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magic_library.text.points")), 
-            titleX, pointsY, 
-            0x009c00, 
+            textRenderer,
+            pointsText,
+            250 - width, pointsY,
+            0x009c00,
             false);
     }
 }

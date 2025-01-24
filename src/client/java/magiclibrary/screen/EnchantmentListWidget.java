@@ -101,13 +101,13 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var pointsButton = children.getFirst();
-            pointsButton.setPosition(x + 84, y-2);
+            pointsButton.setPosition(x + 164, y-2);
             pointsButton.setDimensions(48, 18);
             pointsButton.render(context, mouseX, mouseY, tickDelta);
 
             var nameText = children.getLast();
             nameText.setPosition(x - 14, y-1);
-            nameText.setDimensions(90, 18);
+            nameText.setDimensions(150, 18);
             nameText.render(context, mouseX, mouseY, tickDelta);
         }
 
