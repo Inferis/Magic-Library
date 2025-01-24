@@ -47,5 +47,11 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int slot) {
         return null;
     }
-    
+
+    public void deductPoints(int points) {
+        this.points -= points;
+        if (this.points < 0) {
+            this.points = 0;
+        }
+    }
 }

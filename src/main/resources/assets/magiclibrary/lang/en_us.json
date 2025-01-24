@@ -6,6 +6,7 @@
     "text.magiclibrary.book_registered": "Book was registered in library",
 
     "screen.magic_library.title": "Magic Library",
+    "screen.magic_library.text.one_point": "1 available point",
+    "screen.magic_library.text.no_points": "No available points",
     "screen.magic_library.text.points": " available points"
-
 }

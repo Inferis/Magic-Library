@@ -90,6 +90,6 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
-        return new MagicLibraryScreenData(120, getEnchantmentsString());
+        return new MagicLibraryScreenData(20, getEnchantmentsString());
     }
 }

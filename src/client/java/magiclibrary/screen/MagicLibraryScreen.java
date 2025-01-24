@@ -53,6 +53,14 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
         listWidget = addDrawableChild(new EnchantmentListWidget(client, 240, 106, originX + 8, originY + 19, 20));
         listWidget.setPosition(originX + 8, originY + 19);
 
+        for (var entry: getCurrentEntries()) {
+            listWidget.addEntry(entry);
+        }
+   }
+
+    private List<EnchantmentEntry> getCurrentEntries() {
+        var result = new ArrayList<EnchantmentEntry>();
+
         var enchantmentRegistry = client.world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
         if (enchantmentRegistry.isPresent()) {
             for (var identifier : handler.getEnchantments().getIdentifiers()) {
@@ -62,15 +70,20 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
                     for (var level = 1; level <= maxLevel; level++) {
                         int level2 = level;
                         var entry = EnchantmentEntry.of(enchantment.get().value(), level, handler.getPoints(), getTextRenderer(), pressedEntry -> {
+                            handler.deductPoints(pressedEntry.points);
                             ClientPlayNetworking.send(new ExtractEnchantmentC2SPayload(identifier, level2));
+                            var y = listWidget.getScrollY();
+                            clearAndInit();
+                            listWidget.setScrollY(y);
                         });
-                        listWidget.addEntry(entry);
+                        result.add(entry);
                     }
                 }
             }
         }
 
-   }
+        return result;
+    }
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
@@ -89,12 +102,24 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         super.drawForeground(context, mouseX, mouseY);
 
-        var pointsText = Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magic_library.text.points"));
-        int width = (int)(textRenderer.getTextHandler().getWidth(pointsText.toString()) / 4.0);
+        Text pointsText;
+        switch (handler.getPoints()) {
+            case 0:
+                pointsText = Text.translatable("screen.magic_library.text.no_points");
+                break;
+            case 1:
+                pointsText = Text.translatable("screen.magic_library.text.one_point");
+                break;
+            default:
+                pointsText = Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magic_library.text.points"));
+                break;
+        }
+
+        int width = (int)(getTextRenderer().getTextHandler().getWidth(pointsText));
         context.drawText(
             textRenderer,
             pointsText,
-            250 - width, pointsY,
+            248 - width, pointsY,
             0x009c00,
             false);
     }

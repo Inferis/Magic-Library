@@ -35,6 +35,7 @@ public record ExtractEnchantmentC2SPayload(String identifier, int level) impleme
             if (!context.player().giveItemStack(stack)) {
                 context.player().dropItem(stack, false, false);
             }
+
         });
     }
 }
