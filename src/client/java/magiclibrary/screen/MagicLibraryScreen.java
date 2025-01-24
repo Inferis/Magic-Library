@@ -1,11 +1,26 @@
 package magiclibrary.screen;
 
+import java.beans.Encoder;
+import java.util.ArrayList;
+import java.util.List;
+
 import magiclibrary.MagicLibrary;
+import magiclibrary.networking.ExtractEnchantmentC2SPayload;
+import magiclibrary.screen.EnchantmentListWidget.EnchantmentEntry;
 import magiclibrary.screenhandler.MagicLibraryScreenHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.ElementListWidget;
+import net.minecraft.client.gui.widget.ElementListWidget.Entry;
+import net.minecraft.client.gui.widget.EntryListWidget;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.recipe.display.SlotDisplay;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -15,6 +30,7 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     private int originX;
     private int originY;
     private int pointsY;
+    private EnchantmentListWidget listWidget;
 
     public MagicLibraryScreen(MagicLibraryScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
@@ -27,9 +43,38 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     @Override
     protected void init() {
         super.init();
-        
+
         originX = (width - backgroundWidth) / 2;
         originY = (height - backgroundHeight) / 2;
+
+        listWidget = addDrawableChild(new EnchantmentListWidget(client, 160, 74, originX + 8, originY + 21, 20));
+        listWidget.setPosition(originX + 8, originY + 21);
+
+        var enchantmentRegistry = client.world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
+        if (enchantmentRegistry.isPresent()) {
+            for (var identifier : handler.getEnchantments().getIdentifiers()) {
+                var enchantment = enchantmentRegistry.get().getEntry(Identifier.of(identifier));
+                if (enchantment.isPresent()) {
+                    var maxLevel = handler.getEnchantments().get(identifier);
+                    for (var level = 1; level <= maxLevel; level++) {
+                        int level2 = level;
+                        var entry = EnchantmentEntry.of(enchantment.get().value(), level, handler.getPoints(), getTextRenderer(), pressedEntry -> {
+                            ClientPlayNetworking.send(new ExtractEnchantmentC2SPayload(identifier, level2));
+                        });
+                        listWidget.addEntry(entry);
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
+        if (mouseX >= originX + 8 && mouseX < originX + 168 && mouseY >= originY + 21 && mouseY < 95) {
+            listWidget.setScrollY(listWidget.getScrollY() + verticalAmount);
+        }
+        return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 
     @Override

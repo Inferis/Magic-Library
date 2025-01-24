@@ -1,17 +1,26 @@
 package magiclibrary.screenhandler;
 
+import magiclibrary.MagicLibrary;
+import magiclibrary.block.entity.MagicLibraryScreenData;
 import magiclibrary.common.EnchantmentsContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 
 public class MagicLibraryScreenHandler extends ScreenHandler {
     private EnchantmentsContainer enchantmentsContainer;
     private int points;
 
-    public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new EnchantmentsContainer(), 0);
+    public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory, MagicLibraryScreenData data) {
+        this(syncId, playerInventory, EnchantmentsContainer.fromString(data.enchantments()), data.points());
+    }
+
+    @Override
+    public void syncState() {
+        MagicLibrary.LOGGER.info("syncState");
+        super.syncState();
     }
 
     public MagicLibraryScreenHandler(int syncId, PlayerInventory playerInventory, EnchantmentsContainer enchantmentsContainer, int points) {

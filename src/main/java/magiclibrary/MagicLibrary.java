@@ -1,6 +1,12 @@
 package magiclibrary;
 
+import magiclibrary.networking.ExtractEnchantmentC2SPayload;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 import org.slf4j.Logger;
@@ -28,5 +34,16 @@ public class MagicLibrary implements ModInitializer {
 		MagicLibraryItems.registerItemGroups();
 		MagicLibraryComponents.registerComponents();
 		MagicLibraryScreenHandlers.registerScreenHandlers();
+
+		registerNetworkPayloads();
+		registerNetworkReceivers();
+	}
+
+	private void registerNetworkPayloads() {
+		PayloadTypeRegistry.playC2S().register(ExtractEnchantmentC2SPayload.ID, ExtractEnchantmentC2SPayload.CODEC);
+	}
+
+	private void registerNetworkReceivers() {
+		ServerPlayNetworking.registerGlobalReceiver(ExtractEnchantmentC2SPayload.ID, ExtractEnchantmentC2SPayload::handle);
 	}
 }

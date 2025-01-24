@@ -3,6 +3,7 @@ package magiclibrary.block.entity;
 import magiclibrary.MagicLibrary;
 import magiclibrary.common.EnchantmentsContainer;
 import magiclibrary.screenhandler.MagicLibraryScreenHandler;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,10 +12,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class MagicLibraryBlockEntity extends BlockEntity implements NamedScreenHandlerFactory {
+public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
 
@@ -72,7 +74,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements NamedScreenH
     @Override
     protected void readNbt(NbtCompound nbt, WrapperLookup registries) {
         super.readNbt(nbt, registries);
-        enchantments.fromString(nbt.getString("enchantments"));
+        enchantments = EnchantmentsContainer.fromString(nbt.getString("enchantments"));
         points = nbt.getInt("points");
     }
 
@@ -84,5 +86,10 @@ public class MagicLibraryBlockEntity extends BlockEntity implements NamedScreenH
     @Override
     public Text getDisplayName() {
         return Text.translatable("screen.magic_library.title");
+    }
+
+    @Override
+    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+        return new MagicLibraryScreenData(12, getEnchantmentsString());
     }
 }

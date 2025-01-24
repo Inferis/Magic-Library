@@ -51,13 +51,14 @@ public class EnchantmentsContainer {
         return String.join(",", elements);
     }
 
-    public void fromString(String string) {
-        enchantments.clear();
+    public static EnchantmentsContainer fromString(String string) {
+        var enchantments = new EnchantmentsContainer();
         if (string != null && !string.isEmpty()) {
             for (var element: string.split(",")) {
                 var parts = element.split("=");
-                put(parts[0], Integer.parseInt(parts[1]));
+                enchantments.put(parts[0], Integer.parseInt(parts[1]));
             }
         }
+        return enchantments;
     }
 }
