@@ -5,10 +5,12 @@
 
     "text.magiclibrary.book_registered": "Book was registered in library",
 
-    "screen.magic_library.title": "Magic Library",
-    "screen.magic_library.text.one_point": "1 available point",
-    "screen.magic_library.text.no_points": "No available points",
-    "screen.magic_library.text.points": " available points",
+    "screen.magiclibrary.magic_library.title": "Magic Library",
+    "screen.magiclibrary.magic_library.text.one_point": "1 available point",
+    "screen.magiclibrary.magic_library.text.no_points": "No available points",
+    "screen.magiclibrary.magic_library.text.points": " available points",
+    "screen.magiclibrary.magic_library.consume.text": "Consume:",
+    "screen.magiclibrary.magic_library.consume.tooltip": "Warning: the item will be completely consumed!",
 
     "tooltip.magiclibrary.enchantments.title": "Enchantments:",
     "tooltip.magiclibrary.enchantment": "* %s: 1-%s",

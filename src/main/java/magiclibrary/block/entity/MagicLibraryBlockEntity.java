@@ -112,7 +112,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public Text getDisplayName() {
-        return Text.translatable("screen.magic_library.title");
+        return Text.translatable("screen.magiclibrary.magic_library.title");
     }
 
     @Override

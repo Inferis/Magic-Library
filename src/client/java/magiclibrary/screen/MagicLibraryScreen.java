@@ -12,6 +12,7 @@ import magiclibrary.screenhandler.MagicLibraryScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.render.RenderLayer;
@@ -48,13 +49,14 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
 
         createListWidget(getCurrentEntries());
 
-        var consumeButtonWidget = addDrawableChild(ButtonWidget.builder(Text.literal("Consume:"), button -> {
+        var consumeButtonWidget = addDrawableChild(ButtonWidget.builder(Text.translatable("screen.magiclibrary.magic_library.consume.text"), button -> {
             var stack = getScreenHandler().getSlot(0).getStack();
             if (!stack.isEmpty()) {
                 ClientPlayNetworking.send(new ImportEnchantmentsC2SPayload(handler.getEntityPos(), stack));
                 getScreenHandler().getSlot(0).setStack(ItemStack.EMPTY);
             }
         }).size(60, 18).build());
+        consumeButtonWidget.setTooltip(Tooltip.of(Text.translatable("screen.magiclibrary.magic_library.consume.tooltip")));
         consumeButtonWidget.setPosition(originX + 126, originY + 126);
     }
 
@@ -115,13 +117,13 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
         Text pointsText;
         switch (handler.getPoints()) {
             case 0:
-                pointsText = Text.translatable("screen.magic_library.text.no_points");
+                pointsText = Text.translatable("screen.magiclibrary.magic_library.text.no_points");
                 break;
             case 1:
-                pointsText = Text.translatable("screen.magic_library.text.one_point");
+                pointsText = Text.translatable("screen.magiclibrary.magic_library.text.one_point");
                 break;
             default:
-                pointsText = Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magic_library.text.points"));
+                pointsText = Text.literal("" + handler.getPoints()).append(Text.translatable("screen.magiclibrary.magic_library.text.points"));
                 break;
         }
 
