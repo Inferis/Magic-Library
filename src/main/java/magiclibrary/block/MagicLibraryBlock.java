@@ -112,7 +112,8 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
             return ActionResult.SUCCESS;
         }
 
-        if (stack.getItem() != Items.ENCHANTED_BOOK) {
+        var canConsumeItem = EnchantmentHelper.hasEnchantments(stack) && stack.isOf(Items.ENCHANTED_BOOK);
+        if (!canConsumeItem) {
             var factory = state.createScreenHandlerFactory(world, pos);
             if (factory != null) {
                 player.openHandledScreen(factory);
