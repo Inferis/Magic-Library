@@ -105,6 +105,7 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
     @Override
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         context.drawTexture(RenderLayer::getGuiTextured, BACKGROUND_TEXTURE, originX, originY, 0, 0, backgroundWidth, backgroundHeight, 256, 256);
+        this.drawMouseoverTooltip(context, mouseX, mouseY);
     }
 
     @Override
