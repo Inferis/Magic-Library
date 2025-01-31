@@ -2,6 +2,8 @@ package magiclibrary.screenhandler;
 
 import magiclibrary.block.entity.MagicLibraryScreenData;
 import magiclibrary.common.EnchantmentsContainer;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -56,7 +58,7 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
     public ItemStack quickMove(PlayerEntity player, int slot) {
         var stack = getSlot(slot).getStack();
         if (!stack.isEmpty()) {
-            if (slot != 0 && getSlot(0).getStack().isEmpty()) {
+            if (slot != 0 && EnchantmentHelper.hasEnchantments(stack) && getSlot(0).getStack().isEmpty()) {
                 if (insertItem(stack, 0, 1, false)) {
                     return stack;
                 }
