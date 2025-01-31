@@ -56,6 +56,238 @@
         },
         "filled=18": {
             "model": "magiclibrary:block/magic_library_18"
+        },
+
+        "filled=0,facing=south": {
+            "model": "magiclibrary:block/magic_library_0",
+            "y": 180
+        },
+        "filled=1,facing=south": {
+            "model": "magiclibrary:block/magic_library_1",
+            "y": 180
+        },
+        "filled=2,facing=south": {
+            "model": "magiclibrary:block/magic_library_2",
+            "y": 180
+        },
+        "filled=3,facing=south": {
+            "model": "magiclibrary:block/magic_library_3",
+            "y": 180
+        },
+        "filled=4,facing=south": {
+            "model": "magiclibrary:block/magic_library_4",
+            "y": 180
+        },
+        "filled=5,facing=south": {
+            "model": "magiclibrary:block/magic_library_5",
+            "y": 180
+        },
+        "filled=6,facing=south": {
+            "model": "magiclibrary:block/magic_library_6",
+            "y": 180
+        },
+        "filled=7,facing=south": {
+            "model": "magiclibrary:block/magic_library_7",
+            "y": 180
+        },
+        "filled=8,facing=south": {
+            "model": "magiclibrary:block/magic_library_8",
+            "y": 180
+        },
+        "filled=9,facing=south": {
+            "model": "magiclibrary:block/magic_library_9",
+            "y": 180
+        },
+        "filled=10,facing=south": {
+            "model": "magiclibrary:block/magic_library_10",
+            "y": 180
+        },
+        "filled=11,facing=south": {
+            "model": "magiclibrary:block/magic_library_11",
+            "y": 180
+        },
+        "filled=12,facing=south": {
+            "model": "magiclibrary:block/magic_library_12",
+            "y": 180
+        },
+        "filled=13,facing=south": {
+            "model": "magiclibrary:block/magic_library_13",
+            "y": 180
+        },
+        "filled=14,facing=south": {
+            "model": "magiclibrary:block/magic_library_14",
+            "y": 180
+        },
+        "filled=15,facing=south": {
+            "model": "magiclibrary:block/magic_library_15",
+            "y": 180
+        },
+        "filled=16,facing=south": {
+            "model": "magiclibrary:block/magic_library_16",
+            "y": 180
+        },
+        "filled=17,facing=south": {
+            "model": "magiclibrary:block/magic_library_17",
+            "y": 180
+        },
+        "filled=18,facing=south": {
+            "model": "magiclibrary:block/magic_library_18",
+            "y": 180
+        },
+
+        "filled=0,facing=east": {
+            "model": "magiclibrary:block/magic_library_0",
+            "y": 90
+        },
+        "filled=1,facing=east": {
+            "model": "magiclibrary:block/magic_library_1",
+            "y": 90
+        },
+        "filled=2,facing=east": {
+            "model": "magiclibrary:block/magic_library_2",
+            "y": 90
+        },
+        "filled=3,facing=east": {
+            "model": "magiclibrary:block/magic_library_3",
+            "y": 90
+        },
+        "filled=4,facing=east": {
+            "model": "magiclibrary:block/magic_library_4",
+            "y": 90
+        },
+        "filled=5,facing=east": {
+            "model": "magiclibrary:block/magic_library_5",
+            "y": 90
+        },
+        "filled=6,facing=east": {
+            "model": "magiclibrary:block/magic_library_6",
+            "y": 90
+        },
+        "filled=7,facing=east": {
+            "model": "magiclibrary:block/magic_library_7",
+            "y": 90
+        },
+        "filled=8,facing=east": {
+            "model": "magiclibrary:block/magic_library_8",
+            "y": 90
+        },
+        "filled=9,facing=east": {
+            "model": "magiclibrary:block/magic_library_9",
+            "y": 90
+        },
+        "filled=10,facing=east": {
+            "model": "magiclibrary:block/magic_library_10",
+            "y": 90
+        },
+        "filled=11,facing=east": {
+            "model": "magiclibrary:block/magic_library_11",
+            "y": 90
+        },
+        "filled=12,facing=east": {
+            "model": "magiclibrary:block/magic_library_12",
+            "y": 90
+        },
+        "filled=13,facing=east": {
+            "model": "magiclibrary:block/magic_library_13",
+            "y": 90
+        },
+        "filled=14,facing=east": {
+            "model": "magiclibrary:block/magic_library_14",
+            "y": 90
+        },
+        "filled=15,facing=east": {
+            "model": "magiclibrary:block/magic_library_15",
+            "y": 90
+        },
+        "filled=16,facing=east": {
+            "model": "magiclibrary:block/magic_library_16",
+            "y": 90
+        },
+        "filled=17,facing=east": {
+            "model": "magiclibrary:block/magic_library_17",
+            "y": 90
+        },
+        "filled=18,facing=east": {
+            "model": "magiclibrary:block/magic_library_18",
+            "y": 90
+        },
+
+        "filled=0,facing=west": {
+            "model": "magiclibrary:block/magic_library_0",
+            "y": 270
+        },
+        "filled=1,facing=west": {
+            "model": "magiclibrary:block/magic_library_1",
+            "y": 270
+        },
+        "filled=2,facing=west": {
+            "model": "magiclibrary:block/magic_library_2",
+            "y": 270
+        },
+        "filled=3,facing=west": {
+            "model": "magiclibrary:block/magic_library_3",
+            "y": 270
+        },
+        "filled=4,facing=west": {
+            "model": "magiclibrary:block/magic_library_4",
+            "y": 270
+        },
+        "filled=5,facing=west": {
+            "model": "magiclibrary:block/magic_library_5",
+            "y": 270
+        },
+        "filled=6,facing=west": {
+            "model": "magiclibrary:block/magic_library_6",
+            "y": 270
+        },
+        "filled=7,facing=west": {
+            "model": "magiclibrary:block/magic_library_7",
+            "y": 270
+        },
+        "filled=8,facing=west": {
+            "model": "magiclibrary:block/magic_library_8",
+            "y": 270
+        },
+        "filled=9,facing=west": {
+            "model": "magiclibrary:block/magic_library_9",
+            "y": 270
+        },
+        "filled=10,facing=west": {
+            "model": "magiclibrary:block/magic_library_10",
+            "y": 270
+        },
+        "filled=11,facing=west": {
+            "model": "magiclibrary:block/magic_library_11",
+            "y": 270
+        },
+        "filled=12,facing=west": {
+            "model": "magiclibrary:block/magic_library_12",
+            "y": 270
+        },
+        "filled=13,facing=west": {
+            "model": "magiclibrary:block/magic_library_13",
+            "y": 270
+        },
+        "filled=14,facing=west": {
+            "model": "magiclibrary:block/magic_library_14",
+            "y": 270
+        },
+        "filled=15,facing=west": {
+            "model": "magiclibrary:block/magic_library_15",
+            "y": 270
+        },
+        "filled=16,facing=west": {
+            "model": "magiclibrary:block/magic_library_16",
+            "y": 270
+        },
+        "filled=17,facing=west": {
+            "model": "magiclibrary:block/magic_library_17",
+            "y": 270
+        },
+        "filled=18,facing=west": {
+            "model": "magiclibrary:block/magic_library_18",
+            "y": 270
         }
+
     }
 }
