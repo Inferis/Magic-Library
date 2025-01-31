@@ -76,10 +76,14 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
 
         if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity breakingBlockEntity) {
             var enchantmentsString = itemStack.get(MagicLibraryComponents.ENCHANTMENTS_COMPONENT);
+            if (enchantmentsString != null) {
+                breakingBlockEntity.setEnchantmentsString(enchantmentsString);
+                updateFilled(world, pos, state);
+            }
             var points = itemStack.get(MagicLibraryComponents.POINTS_COMPONENT);
-            breakingBlockEntity.setEnchantmentsString(enchantmentsString);
-            breakingBlockEntity.setPoints(points);
-            updateFilled(world, pos, state);
+            if (points != null) {
+                breakingBlockEntity.setPoints(points);
+            }
         }
     }
 
