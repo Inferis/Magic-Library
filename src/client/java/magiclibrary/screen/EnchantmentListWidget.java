@@ -80,7 +80,9 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
             }
 
             var nameText = MutableText.of(enchantment.description().getContent());
-            nameText.append(" " + levelText);
+            if (enchantment.getMaxLevel() > 1) {
+                nameText.append(" " + levelText);
+            }
 
             var nameTextWidget = new TextWidget(nameText, textRenderer);
             nameTextWidget.alignLeft();
