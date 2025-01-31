@@ -144,7 +144,7 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
         return (MagicLibraryBlockEntity)world.getBlockEntity(pos);
     }
 
-    private void updateFilled(World world, BlockPos pos, BlockState state) {
+    public void updateFilled(World world, BlockPos pos, BlockState state) {
         if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
             var size = libraryBlockEntity.getEnchantmentsSize();
             if (size > 18) { size = 18; }

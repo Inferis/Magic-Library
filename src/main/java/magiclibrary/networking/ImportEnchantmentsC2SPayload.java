@@ -28,8 +28,8 @@ public record ImportEnchantmentsC2SPayload(BlockPos entityPos, ItemStack itemSta
                 libraryBlockEntity.importEnchantments(itemStack());
                 if (context.player().currentScreenHandler instanceof MagicLibraryScreenHandler libraryScreenHandler) {
                     libraryScreenHandler.resetImportInventory();
-                    libraryScreenHandler.updateEnchantments(libraryBlockEntity.getEnchantments());
-                    ServerPlayNetworking.send(context.player(), new UpdateScreenS2CPayload(false));
+                    libraryScreenHandler.updateEnchantmentsAndPoints(libraryBlockEntity.getEnchantments(), libraryBlockEntity.getPoints());
+                    ServerPlayNetworking.send(context.player(), new UpdateScreenS2CPayload(libraryBlockEntity.getEnchantmentsString(), libraryBlockEntity.getPoints()));
                 }
             }
         });

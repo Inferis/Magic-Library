@@ -16,10 +16,10 @@ public class MagicLibraryClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(UpdateScreenS2CPayload.ID, MagicLibraryClient::handleUpdateScreenPayload);
 	}
 
-	private static void handleUpdateScreenPayload(UpdateScreenS2CPayload updateScreenS2CPayload, ClientPlayNetworking.Context context) {
+	private static void handleUpdateScreenPayload(UpdateScreenS2CPayload payload, ClientPlayNetworking.Context context) {
 		context.client().execute(() -> {
 			if (context.client().currentScreen instanceof MagicLibraryScreen magicLibraryScreen) {
-				magicLibraryScreen.update();
+				magicLibraryScreen.update(payload.enchantmentsString(), payload.points());
 			}
 		});
 	}

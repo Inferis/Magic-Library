@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import magiclibrary.MagicLibrary;
+import magiclibrary.common.EnchantmentsContainer;
 import magiclibrary.networking.ImportEnchantmentsC2SPayload;
 import magiclibrary.networking.ExportEnchantmentC2SPayload;
 import magiclibrary.screen.EnchantmentListWidget.EnchantmentEntry;
@@ -132,7 +133,10 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
             false);
     }
 
-    public void update() {
+    public void update(String enchantmentsString, int points) {
+        getScreenHandler().updateEnchantmentsAndPoints(EnchantmentsContainer.fromString(enchantmentsString), points);
+        var y = listWidget.getScrollY();
         clearAndInit();
+        listWidget.setScrollY(y);
     }
 }

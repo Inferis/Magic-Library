@@ -1,20 +1,15 @@
 package magiclibrary.screenhandler;
 
-import magiclibrary.MagicLibrary;
 import magiclibrary.block.entity.MagicLibraryScreenData;
 import magiclibrary.common.EnchantmentsContainer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Properties;
 
 public class MagicLibraryScreenHandler extends ScreenHandler {
     private EnchantmentsContainer enchantmentsContainer;
@@ -82,7 +77,8 @@ public class MagicLibraryScreenHandler extends ScreenHandler {
         }
     }
 
-    public void updateEnchantments(EnchantmentsContainer enchantmentsContainer) {
+    public void updateEnchantmentsAndPoints(EnchantmentsContainer enchantmentsContainer, int points) {
         this.enchantmentsContainer = enchantmentsContainer;
+        this.points = points;
     }
 }

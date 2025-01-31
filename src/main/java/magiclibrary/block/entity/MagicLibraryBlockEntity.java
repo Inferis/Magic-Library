@@ -1,6 +1,7 @@
 package magiclibrary.block.entity;
 
 import magiclibrary.MagicLibrary;
+import magiclibrary.block.MagicLibraryBlock;
 import magiclibrary.common.EnchantmentsContainer;
 import magiclibrary.screenhandler.MagicLibraryScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -119,6 +120,11 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
                 var level = enchantments.getLevel(enchantment);
                 registerEnchantment(enchantment.getIdAsString(), level);
                 addPointsForLevel(level, enchantment.value());
+            }
+
+            var state = world.getBlockState(pos);
+            if (state.getBlock() instanceof MagicLibraryBlock libraryBlock) {
+                libraryBlock.updateFilled(world, pos, state);
             }
         }
     }

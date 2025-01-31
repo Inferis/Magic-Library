@@ -6,10 +6,11 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
 
-public record UpdateScreenS2CPayload(boolean dummy) implements CustomPayload {
+public record UpdateScreenS2CPayload(String enchantmentsString, int points) implements CustomPayload {
     public static Id<UpdateScreenS2CPayload> ID = new CustomPayload.Id<>(MagicLibrary.id("update_screen_s2c_payload"));
     public static PacketCodec<RegistryByteBuf, UpdateScreenS2CPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.BOOLEAN, UpdateScreenS2CPayload::dummy,
+            PacketCodecs.STRING, UpdateScreenS2CPayload::enchantmentsString,
+            PacketCodecs.INTEGER, UpdateScreenS2CPayload::points,
             UpdateScreenS2CPayload::new);
 
     @Override
