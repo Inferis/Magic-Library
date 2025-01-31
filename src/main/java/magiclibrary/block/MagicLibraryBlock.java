@@ -102,6 +102,11 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
             stack.set(MagicLibraryComponents.ENCHANTMENTS_COMPONENT, breakingBlockEntity.getEnchantmentsString());
             stack.set(MagicLibraryComponents.POINTS_COMPONENT, breakingBlockEntity.getPoints());
             result.add(stack);
+
+            var importStack = breakingBlockEntity.getImportStack();
+            if (!importStack.isEmpty()) {
+                result.add(importStack);
+            }
         }
         return result;
     }

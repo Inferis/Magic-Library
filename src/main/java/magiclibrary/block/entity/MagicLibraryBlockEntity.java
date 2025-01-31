@@ -24,11 +24,11 @@ import net.minecraft.util.math.BlockPos;
 public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
-    private SimpleInventory dumpInventory;
+    private SimpleInventory importInventory;
 
     public MagicLibraryBlockEntity(BlockPos pos, BlockState state) {
         super(MagicLibraryBlockEntities.MAGIC_LIBRARY, pos, state);
-        dumpInventory = new SimpleInventory(1);
+        importInventory = new SimpleInventory(1);
     }
 
     public void addPointsForLevel(int level, Enchantment enchantment) {
@@ -99,7 +99,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new MagicLibraryScreenHandler(syncId, playerInventory, dumpInventory, enchantments, points, getPos());
+        return new MagicLibraryScreenHandler(syncId, playerInventory, importInventory, enchantments, points, getPos());
     }
 
     @Override
@@ -131,5 +131,9 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     public EnchantmentsContainer getEnchantments() {
         return enchantments.copy();
+    }
+
+    public ItemStack getImportStack() {
+        return importInventory.getStack(0);
     }
 }
