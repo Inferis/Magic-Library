@@ -11,6 +11,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -21,7 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
+public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, InventoryChangedListener {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
     private SimpleInventory importInventory;
@@ -29,6 +32,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
     public MagicLibraryBlockEntity(BlockPos pos, BlockState state) {
         super(MagicLibraryBlockEntities.MAGIC_LIBRARY, pos, state);
         importInventory = new SimpleInventory(1);
+        importInventory.addListener(this);
     }
 
     public void addPointsForLevel(int level, Enchantment enchantment) {
@@ -88,6 +92,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
         super.writeNbt(nbt, registries);
         nbt.putString("enchantments", enchantments.toString());
         nbt.putInt("points", points);
+        nbt.put("importInventory", importInventory.toNbtList(registries));
     }
 
     @Override
@@ -95,6 +100,9 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
         super.readNbt(nbt, registries);
         enchantments = EnchantmentsContainer.fromString(nbt.getString("enchantments"));
         points = nbt.getInt("points");
+        if (nbt.contains("importInventory")) {
+            importInventory.readNbtList(nbt.getList("importInventory", 10), registries);
+        }
     }
 
     @Override
@@ -135,5 +143,10 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     public ItemStack getImportStack() {
         return importInventory.getStack(0);
+    }
+
+    @Override
+    public void onInventoryChanged(Inventory sender) {
+        markDirty();
     }
 }
