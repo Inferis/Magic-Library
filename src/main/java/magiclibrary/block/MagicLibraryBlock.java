@@ -74,9 +74,11 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
 
-        var enchantmentsString = itemStack.get(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE);
-        if (enchantmentsString != null && world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity breakingBlockEntity) {
+        if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity breakingBlockEntity) {
+            var enchantmentsString = itemStack.get(MagicLibraryComponents.ENCHANTMENTS_COMPONENT);
+            var points = itemStack.get(MagicLibraryComponents.POINTS_COMPONENT);
             breakingBlockEntity.setEnchantmentsString(enchantmentsString);
+            breakingBlockEntity.setPoints(points);
             updateFilled(world, pos, state);
         }
     }
@@ -93,7 +95,8 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
         var entry = Registries.ITEM.getEntry(MagicLibrary.id("magic_library"));
         if (entry.isPresent() && breakingBlockEntity != null) {
             var stack = new ItemStack(entry.get());
-            stack.set(MagicLibraryComponents.ENCHANTMENTS_COMPONENT_TYPE, breakingBlockEntity.getEnchantmentsString());
+            stack.set(MagicLibraryComponents.ENCHANTMENTS_COMPONENT, breakingBlockEntity.getEnchantmentsString());
+            stack.set(MagicLibraryComponents.POINTS_COMPONENT, breakingBlockEntity.getPoints());
             result.add(stack);
         }
         return result;
@@ -114,32 +117,10 @@ public class MagicLibraryBlock extends Block implements BlockEntityProvider {
             else {
                 return ActionResult.FAIL;
             }
-            /* 
-            // temporary
-            if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity) {
-                player.sendMessage(Text.literal(libraryBlockEntity.getEnchantmentsString()), false);
-            }
-            // temporary
-            var enchantmentRegistry = world.getRegistryManager().getOptional(RegistryKeys.ENCHANTMENT);
-            if (enchantmentRegistry.isPresent()) {
-                var e = enchantmentRegistry.get().getEntry(Enchantments.BLAST_PROTECTION.getValue());
-                if (e.isPresent()) {
-                    var newStack = new ItemStack(Items.ENCHANTED_BOOK);
-                    newStack.addEnchantment(e.get(), 4);
-                    player.giveItemStack(newStack);
-                }
-            }
-            */
         }
 
         if (world.getBlockEntity(pos) instanceof MagicLibraryBlockEntity libraryBlockEntity && EnchantmentHelper.hasEnchantments(stack)) {
-            // register enchantments
-            var enchantments = EnchantmentHelper.getEnchantments(stack);
-            for (var enchantment: enchantments.getEnchantments()) {
-                var level = enchantments.getLevel(enchantment);
-                libraryBlockEntity.registerEnchantment(enchantment.getIdAsString(), level);
-                libraryBlockEntity.addPointsForLevel(level, enchantment.value());
-            }
+            libraryBlockEntity.importEnchantments(stack);
 
             // consume book
             stack.decrement(1);

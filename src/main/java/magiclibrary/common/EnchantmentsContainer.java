@@ -61,4 +61,12 @@ public class EnchantmentsContainer {
         }
         return enchantments;
     }
+
+    public EnchantmentsContainer copy() {
+        var copy = new EnchantmentsContainer();
+        for (var id: enchantments.keySet()) {
+            copy.put(id, enchantments.get(id));
+        }
+        return copy;
+    }
 }

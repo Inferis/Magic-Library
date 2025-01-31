@@ -1,12 +1,11 @@
 package magiclibrary;
 
-import magiclibrary.networking.ExtractEnchantmentC2SPayload;
+import magiclibrary.networking.ImportEnchantmentsC2SPayload;
+import magiclibrary.networking.ExportEnchantmentC2SPayload;
+import magiclibrary.networking.UpdateScreenS2CPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 import org.slf4j.Logger;
@@ -40,10 +39,13 @@ public class MagicLibrary implements ModInitializer {
 	}
 
 	private void registerNetworkPayloads() {
-		PayloadTypeRegistry.playC2S().register(ExtractEnchantmentC2SPayload.ID, ExtractEnchantmentC2SPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(ExportEnchantmentC2SPayload.ID, ExportEnchantmentC2SPayload.CODEC);
+		PayloadTypeRegistry.playC2S().register(ImportEnchantmentsC2SPayload.ID, ImportEnchantmentsC2SPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(UpdateScreenS2CPayload.ID, UpdateScreenS2CPayload.CODEC);
 	}
 
 	private void registerNetworkReceivers() {
-		ServerPlayNetworking.registerGlobalReceiver(ExtractEnchantmentC2SPayload.ID, ExtractEnchantmentC2SPayload::handle);
+		ServerPlayNetworking.registerGlobalReceiver(ExportEnchantmentC2SPayload.ID, ExportEnchantmentC2SPayload::handle);
+		ServerPlayNetworking.registerGlobalReceiver(ImportEnchantmentsC2SPayload.ID, ImportEnchantmentsC2SPayload::handle);
 	}
 }

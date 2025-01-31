@@ -7,8 +7,11 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -20,9 +23,11 @@ import net.minecraft.util.math.BlockPos;
 public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
+    private SimpleInventory dumpInventory;
 
     public MagicLibraryBlockEntity(BlockPos pos, BlockState state) {
         super(MagicLibraryBlockEntities.MAGIC_LIBRARY, pos, state);
+        dumpInventory = new SimpleInventory(1);
     }
 
     public void addPointsForLevel(int level, Enchantment enchantment) {
@@ -40,6 +45,10 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     public int getPoints() {
         return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public boolean registerEnchantment(String identifier, int level) {
@@ -61,7 +70,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     public void setEnchantmentsString(String enchantmentsString) {
-        enchantments.fromString(enchantmentsString);
+        enchantments = EnchantmentsContainer.fromString(enchantmentsString);
         markDirty();
     }
 
@@ -89,7 +98,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-        return new MagicLibraryScreenHandler(syncId, playerInventory, enchantments, points, getPos());
+        return new MagicLibraryScreenHandler(syncId, playerInventory, dumpInventory, enchantments, points, getPos());
     }
 
     @Override
@@ -100,5 +109,21 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
     @Override
     public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
         return new MagicLibraryScreenData(points, getEnchantmentsString(), getPos());
+    }
+
+    public void importEnchantments(ItemStack stack) {
+        if (!stack.isEmpty()) {
+            // register enchantments
+            var enchantments = EnchantmentHelper.getEnchantments(stack);
+            for (var enchantment: enchantments.getEnchantments()) {
+                var level = enchantments.getLevel(enchantment);
+                registerEnchantment(enchantment.getIdAsString(), level);
+                addPointsForLevel(level, enchantment.value());
+            }
+        }
+    }
+
+    public EnchantmentsContainer getEnchantments() {
+        return enchantments.copy();
     }
 }

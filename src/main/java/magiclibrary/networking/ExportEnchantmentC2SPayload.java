@@ -14,13 +14,13 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-public record ExtractEnchantmentC2SPayload(String identifier, int level, BlockPos entityPos) implements CustomPayload {
-    public static Id<ExtractEnchantmentC2SPayload> ID = new CustomPayload.Id<>(MagicLibrary.id("extract_enchantment_c2s_payload"));
-    public static PacketCodec<RegistryByteBuf, ExtractEnchantmentC2SPayload> CODEC = PacketCodec.tuple(
-            PacketCodecs.STRING, ExtractEnchantmentC2SPayload::identifier,
-            PacketCodecs.INTEGER, ExtractEnchantmentC2SPayload::level,
-            BlockPos.PACKET_CODEC, ExtractEnchantmentC2SPayload::entityPos,
-            ExtractEnchantmentC2SPayload::new);
+public record ExportEnchantmentC2SPayload(String identifier, int level, BlockPos entityPos) implements CustomPayload {
+    public static Id<ExportEnchantmentC2SPayload> ID = new CustomPayload.Id<>(MagicLibrary.id("export_enchantment_c2s_payload"));
+    public static PacketCodec<RegistryByteBuf, ExportEnchantmentC2SPayload> CODEC = PacketCodec.tuple(
+            PacketCodecs.STRING, ExportEnchantmentC2SPayload::identifier,
+            PacketCodecs.INTEGER, ExportEnchantmentC2SPayload::level,
+            BlockPos.PACKET_CODEC, ExportEnchantmentC2SPayload::entityPos,
+            ExportEnchantmentC2SPayload::new);
 
     @Override
     public Id<? extends CustomPayload> getId() {

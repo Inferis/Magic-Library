@@ -1,26 +1,21 @@
 package magiclibrary.screen;
 
-import java.beans.Encoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import magiclibrary.MagicLibrary;
-import magiclibrary.networking.ExtractEnchantmentC2SPayload;
+import magiclibrary.networking.ImportEnchantmentsC2SPayload;
+import magiclibrary.networking.ExportEnchantmentC2SPayload;
 import magiclibrary.screen.EnchantmentListWidget.EnchantmentEntry;
 import magiclibrary.screenhandler.MagicLibraryScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ElementListWidget;
-import net.minecraft.client.gui.widget.ElementListWidget.Entry;
-import net.minecraft.client.gui.widget.EntryListWidget;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.recipe.display.SlotDisplay;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -50,13 +45,26 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
         originX = (width - backgroundWidth) / 2;
         originY = (height - backgroundHeight) / 2;
 
-        listWidget = addDrawableChild(new EnchantmentListWidget(client, 240, 106, originX + 8, originY + 19, 20));
+        createListWidget(getCurrentEntries());
+
+        var consumeButtonWidget = addDrawableChild(ButtonWidget.builder(Text.literal("Consume:"), button -> {
+            var stack = getScreenHandler().getSlot(0).getStack();
+            if (!stack.isEmpty()) {
+                ClientPlayNetworking.send(new ImportEnchantmentsC2SPayload(handler.getEntityPos(), stack));
+                getScreenHandler().getSlot(0).setStack(ItemStack.EMPTY);
+            }
+        }).size(60, 18).build());
+        consumeButtonWidget.setPosition(originX + 126, originY + 126);
+    }
+
+    private void createListWidget(List<EnchantmentEntry> currentEntries) {
+        listWidget = addDrawableChild(new EnchantmentListWidget(client, 240, 100, originX + 8, originY + 19, 20));
         listWidget.setPosition(originX + 8, originY + 19);
 
-        for (var entry: getCurrentEntries()) {
+        for (var entry: currentEntries) {
             listWidget.addEntry(entry);
         }
-   }
+    }
 
     private List<EnchantmentEntry> getCurrentEntries() {
         var result = new ArrayList<EnchantmentEntry>();
@@ -71,7 +79,7 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
                         int level2 = level;
                         var entry = EnchantmentEntry.of(enchantment.get().value(), level, handler.getPoints(), getTextRenderer(), pressedEntry -> {
                             handler.deductPoints(pressedEntry.points);
-                            ClientPlayNetworking.send(new ExtractEnchantmentC2SPayload(identifier, level2, handler.getEntityPos()));
+                            ClientPlayNetworking.send(new ExportEnchantmentC2SPayload(identifier, level2, handler.getEntityPos()));
                             var y = listWidget.getScrollY();
                             clearAndInit();
                             listWidget.setScrollY(y);
@@ -122,5 +130,9 @@ public class MagicLibraryScreen extends HandledScreen<MagicLibraryScreenHandler>
             248 - width, pointsY,
             0x009c00,
             false);
+    }
+
+    public void update() {
+        clearAndInit();
     }
 }
