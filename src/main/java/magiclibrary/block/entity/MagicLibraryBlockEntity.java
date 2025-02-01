@@ -17,19 +17,12 @@ import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
-import java.util.Date;
 
 public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<MagicLibraryScreenData>, InventoryChangedListener {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
@@ -114,8 +107,6 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
 
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
-//        new Date().toInstant().getEpochSecond();
-//        Date.from(Instant.EPOCH.plus(112, ChronoUnit.SECONDS));
         return new MagicLibraryScreenHandler(syncId, playerInventory, importInventory, enchantments, points, getPos());
     }
 
