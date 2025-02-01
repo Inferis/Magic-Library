@@ -13,6 +13,7 @@ import net.minecraft.registry.RegistryKeys;
 
 public class MagicLibraryItems {
     public static MagicLibraryBlockItem MAGIC_LIBRARY;
+    public static SampleBlockItem SAMPLE;
 
     interface ItemMaker<T extends Item> {
         T makeItem(RegistryKey<Item> key);
@@ -28,8 +29,11 @@ public class MagicLibraryItems {
     }
 
     public static void registerItems() {
-        MAGIC_LIBRARY = registerItem("magic_library", key -> { 
-            return new MagicLibraryBlockItem(MagicLibraryBlocks.MAGIC_LIBRARY, new Item.Settings().useBlockPrefixedTranslationKey().registryKey(key)); 
+        MAGIC_LIBRARY = registerItem("magic_library", key -> {
+            return new MagicLibraryBlockItem(MagicLibraryBlocks.MAGIC_LIBRARY, new Item.Settings().useBlockPrefixedTranslationKey().registryKey(key));
+        });
+        SAMPLE = registerItem("sample", key -> {
+            return new SampleBlockItem(MagicLibraryBlocks.SAMPLE, new Item.Settings().useBlockPrefixedTranslationKey().registryKey(key));
         });
     }
 

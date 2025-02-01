@@ -9,8 +9,12 @@ import net.minecraft.registry.Registry;
 
 public class MagicLibraryBlockEntities {
     public static BlockEntityType<MagicLibraryBlockEntity> MAGIC_LIBRARY = register(
-        "magic_library",
-        FabricBlockEntityTypeBuilder.<MagicLibraryBlockEntity>create(MagicLibraryBlockEntity::new, MagicLibraryBlocks.MAGIC_LIBRARY).build()
+            "magic_library",
+            FabricBlockEntityTypeBuilder.<MagicLibraryBlockEntity>create(MagicLibraryBlockEntity::new, MagicLibraryBlocks.MAGIC_LIBRARY).build()
+    );
+    public static BlockEntityType<SampleBlockEntity> SAMPLE = register(
+            "sample",
+            FabricBlockEntityTypeBuilder.<SampleBlockEntity>create(SampleBlockEntity::new, MagicLibraryBlocks.SAMPLE).build()
     );
 
     private static <T extends BlockEntityType<?>> T register(String identifier, T blockEntityType) {

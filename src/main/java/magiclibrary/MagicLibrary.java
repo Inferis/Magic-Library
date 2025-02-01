@@ -1,8 +1,6 @@
 package magiclibrary;
 
-import magiclibrary.networking.ImportEnchantmentsC2SPayload;
-import magiclibrary.networking.ExportEnchantmentC2SPayload;
-import magiclibrary.networking.UpdateScreenS2CPayload;
+import magiclibrary.networking.*;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -42,10 +40,15 @@ public class MagicLibrary implements ModInitializer {
 		PayloadTypeRegistry.playC2S().register(ExportEnchantmentC2SPayload.ID, ExportEnchantmentC2SPayload.CODEC);
 		PayloadTypeRegistry.playC2S().register(ImportEnchantmentsC2SPayload.ID, ImportEnchantmentsC2SPayload.CODEC);
 		PayloadTypeRegistry.playS2C().register(UpdateScreenS2CPayload.ID, UpdateScreenS2CPayload.CODEC);
+
+		PayloadTypeRegistry.playC2S().register(AddDateC2SPayload.ID, AddDateC2SPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(UpdateDatesS2CPayload.ID, UpdateDatesS2CPayload.CODEC);
 	}
 
 	private void registerNetworkReceivers() {
 		ServerPlayNetworking.registerGlobalReceiver(ExportEnchantmentC2SPayload.ID, ExportEnchantmentC2SPayload::handle);
 		ServerPlayNetworking.registerGlobalReceiver(ImportEnchantmentsC2SPayload.ID, ImportEnchantmentsC2SPayload::handle);
+
+		ServerPlayNetworking.registerGlobalReceiver(AddDateC2SPayload.ID, AddDateC2SPayload::handle);
 	}
 }

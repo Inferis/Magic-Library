@@ -11,6 +11,7 @@ import net.minecraft.registry.RegistryKeys;
 
 public class MagicLibraryBlocks {
     public static MagicLibraryBlock MAGIC_LIBRARY;
+    public static SampleBlock SAMPLE;
 
     interface BlockMaker<T extends Block> {
         T makeBlock(RegistryKey<Block> key);
@@ -29,7 +30,10 @@ public class MagicLibraryBlocks {
 
     public static void registerBlocks() {
         MAGIC_LIBRARY = registerBlock("magic_library", key -> {
-            return new MagicLibraryBlock(AbstractBlock.Settings.copy(Blocks.BOOKSHELF).registryKey(key)); 
+            return new MagicLibraryBlock(AbstractBlock.Settings.copy(Blocks.BOOKSHELF).registryKey(key));
+        });
+        SAMPLE = registerBlock("sample", key -> {
+            return new SampleBlock(AbstractBlock.Settings.copy(Blocks.STONE).registryKey(key));
         });
     }
 
