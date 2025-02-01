@@ -24,7 +24,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory, InventoryChangedListener {
+public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory<MagicLibraryScreenData>, InventoryChangedListener {
     private EnchantmentsContainer enchantments = new EnchantmentsContainer();
     private int points = 0;
     private SimpleInventory importInventory;
@@ -116,7 +116,7 @@ public class MagicLibraryBlockEntity extends BlockEntity implements ExtendedScre
     }
 
     @Override
-    public Object getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
+    public MagicLibraryScreenData getScreenOpeningData(ServerPlayerEntity serverPlayerEntity) {
         return new MagicLibraryScreenData(points, getEnchantmentsString(), getPos());
     }
 
