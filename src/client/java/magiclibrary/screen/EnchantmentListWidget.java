@@ -27,6 +27,7 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
     
     public int addEntry(EnchantmentEntry entry) {
         entry.x = x;
+        entry.listWidget = this;
         return super.addEntry(entry);
     }
     
@@ -40,6 +41,7 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
         public final int points;
         public final int level;
         public final boolean active;
+        public EnchantmentListWidget listWidget;
 
         public int x = 0;
         private final List<ClickableWidget> children = new ObjectArrayList<>();
@@ -104,7 +106,8 @@ public class EnchantmentListWidget extends ElementListWidget<EnchantmentListWidg
         @Override
         public void render(DrawContext context, int index, int y, int x, int entryWidth, int entryHeight, int mouseX, int mouseY, boolean hovered, float tickDelta) {
             var pointsButton = children.getFirst();
-            pointsButton.setPosition(x + 164, y-2);
+            var offset = listWidget.children().size() <= 4 ? 6 : 0;
+            pointsButton.setPosition(x + 164 + offset, y-2);
             pointsButton.setDimensions(48, 18);
             pointsButton.render(context, mouseX, mouseY, tickDelta);
 
